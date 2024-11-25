@@ -1,43 +1,71 @@
-public class Treinador {
-    String nome;
-    int x, y;
-    Pokemon[] dex = new Pokemon[6];
+class Treinador {
+    private String nome;
+    private int x;
+    private int y;
+    private Pokemon[] pokemons;
+    private int capturados;
 
-    public Treinador(String nome, int x, int y, Pokemon[] dex) {
+    public Treinador(String nome) {
         this.nome = nome;
+        this.x = 0;
+        this.y = 0;
+        this.pokemons = new Pokemon[6];
+        this.capturados = 0;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setPosicao(int x, int y) {
         this.x = x;
         this.y = y;
-        this.dex = dex;
     }
 
-    public void capturar(Pokemon p) {
-        for (int i = 0; i < this.dex.length; i++) {
-            if (this.dex[i] == null) {
-                this.dex[i] = p;
-                System.out.println(p.nome + " foi capturado!");
+    public void mover(String direcao) {
+        switch (direcao.toLowerCase()) {
+            case "cima":
+                y -= 1;
                 break;
-            }
+            case "baixo":
+                y += 1;
+                break;
+            case "esquerda":
+                x -= 1;
+                break;
+            case "direita":
+                x += 1;
+                break;
+            default:
+                System.out.println("Direção inválida!");
         }
     }
-    
 
-    public void mover(String movimento) {
-        switch(movimento) {
-            case "cim": this.y++; break;
-            case "bai": this.y--; break;
-            case "esq": this.x--; break;
-            case "dir": this.x++; break;
-            default: System.out.println("Movimento inválido!");
+    public boolean capturar(Pokemon p) {
+        if (capturados < 6) {
+            pokemons[capturados] = p;
+            p.capturado();
+            capturados++;
+            System.out.println(p.getNome() + " foi capturado!");
+            return true;
+        } else {
+            System.out.println("Sua equipe já está cheia!");
+            return false;
         }
     }
 
     public void listar() {
-        System.out.println("Pokémons capturados:");
-        for (int i = 0; i < this.dex.length; i++) {
-            if (this.dex[i] != null) { // Verifica se há um Pokémon na posição
-                System.out.println("Pokemon " + i + ": " + this.dex[i].nome);
-            }
+        System.out.println("Seus Pokémons:");
+        for (int i = 0; i < capturados; i++) {
+            System.out.println((i + 1) + ". " + pokemons[i].getNome());
         }
     }
-    
 }
